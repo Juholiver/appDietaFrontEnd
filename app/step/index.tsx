@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { z } from 'zod';
 import { Header } from '../../components/header';
 import { Input } from '../../components/input';
 import { colors } from '../../constants/colors';
+import { useDataStore } from '../../store/data';
 
 const schema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
@@ -20,6 +22,19 @@ export default function Step() {
   const {control, handleSubmit, formState:{errors, isValid}} = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  const setPageOne = useDataStore(state => state.setPageOne);
+
+  function handleCreate(data: FormData) {
+    console.log("Passando dados pagina 1")
+    setPageOne({
+      name: data.name,
+      weight: data.weight,
+      height: data.height,
+      age: data.age,
+    });
+    router.push('/create')
+  }
 
   return (
 
@@ -70,7 +85,7 @@ export default function Step() {
           keyboardType="numeric"
         />
 
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={handleSubmit(handleCreate)}>
           <Text style={styles.buttonText}>Avançar</Text>
         </Pressable>
       </ScrollView>
