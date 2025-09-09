@@ -1,10 +1,12 @@
 import { Select } from '@/components/input/select';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
 import { useForm } from 'react-hook-form';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { z } from 'zod';
 import { Header } from '../../components/header';
 import { colors } from '../../constants/colors';
+import { useDataStore } from '../../store/data';
 
 const schema = z.object({
   gender: z.string().min(1, 'Sexo é obrigatório'),
@@ -19,6 +21,8 @@ export default function Create() {
   const {control, handleSubmit, formState:{errors, isValid}} = useForm<FormData>({
     resolver: zodResolver(schema),
   })
+
+  const setPageTwo = useDataStore(state => state.setPageTwo);
 
   const genderOptions = [
     {label: 'Masculino', value: 'masculino'},
@@ -38,6 +42,18 @@ export default function Create() {
     { label: 'Hipertrofia + Definição', value: 'Hipertrofia e Definição' },
     { label: 'Definição', value: 'Definição' },
   ]
+
+  function handleCreate(data: FormData) {
+    setPageTwo({
+      gender: data.gender,
+      objective: data.objective,
+      level: data.level,
+    })
+    
+   
+    router.push('/nutrition')
+
+  }
 
   return (
     <View style={styles.container}>
@@ -70,6 +86,11 @@ export default function Create() {
         error={errors.objective?.message}
         options={objectiveOptions}
       />
+
+      <Pressable style={styles.button} onPress={handleSubmit(handleCreate)}>
+          <Text style={styles.buttonText}>Avançar</Text>
+      </Pressable>
+
     </ScrollView>
 
     </View>
@@ -90,5 +111,17 @@ const styles = StyleSheet.create({
   content:{
     paddingLeft: 16,
     paddingRight: 16,
+  },
+  button: {
+    backgroundColor: colors.blue,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+  },
+  buttonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 })
