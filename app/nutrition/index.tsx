@@ -89,8 +89,8 @@ export default function Nutrition() {
                       <Text>Horario: {refeicao.horario}</Text>
                   </View>
                   <Text style={style.foodText}>Alimentos:</Text>
-                  {refeicao.alimentos.map(alimentos  => (
-                    <Text key={alimentos.nome} style={style.foodText}>{alimentos.nome}</Text>
+                  {refeicao.alimentos.map(alimento  => (
+                    <Text key={alimento} style={style.foodText}>{alimento}</Text>
                   ))}
               </View>
               </>
@@ -185,7 +185,7 @@ const style = StyleSheet.create({
   
   }	,
   foods:{
-    backgroundColor: colors.white,
+    backgroundColor: colors.background,
     padding: 14,
     borderRadius: 8,
     marginTop: 8,

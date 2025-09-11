@@ -5,7 +5,7 @@ interface RefeicoesProps{
    
 }
 
-export interface Data{
+export interface Data {
     nome: string;
     sexo: string;
     peso: number;
